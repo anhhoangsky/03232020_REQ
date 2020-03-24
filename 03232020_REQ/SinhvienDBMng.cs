@@ -83,7 +83,12 @@ namespace _03232020_REQ
                 cnn.Close();
             }
         }
-
+        /// <summary>
+        /// Database SampleDB_XML
+        /// Cột DATAAREA khoá chính data type nchar(10) giá trị 'VOUCHERS'
+        /// Cột DATA data type xml chứa innerXML
+        /// </summary>
+        /// <returns></returns>
         public static XmlDocument GetDanhsachSinvien()
         {
             XmlDocument xmlDoc = new XmlDocument();
@@ -94,7 +99,6 @@ namespace _03232020_REQ
             {
                 string oString = @"select DATA from XmlDB";
                 SqlCommand oCmd = new SqlCommand(oString, cnn);
-                //oCmd.Parameters.AddWithValue("@Fname", fName);
                 cnn.Open();
                 using (SqlDataReader oReader = oCmd.ExecuteReader())
                 {
