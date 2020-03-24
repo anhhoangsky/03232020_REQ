@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.controlpn = new System.Windows.Forms.Panel();
             this.Xoasinhvienbtn = new System.Windows.Forms.Button();
             this.Suasinhvienbtn = new System.Windows.Forms.Button();
@@ -45,7 +46,15 @@
             this.SinhvienIDlb = new System.Windows.Forms.Label();
             this.SinhvienPrklb = new System.Windows.Forms.Label();
             this.viewpn = new System.Windows.Forms.Panel();
+            this.SinhvienView = new System.Windows.Forms.DataGridView();
+            this.SinhvienPrkID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.SinhvienID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.SinhvienName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.SinhvienAddr = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.controlpn.SuspendLayout();
+            this.viewpn.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.SinhvienView)).BeginInit();
             this.SuspendLayout();
             // 
             // controlpn
@@ -78,6 +87,7 @@
             this.Xoasinhvienbtn.TabIndex = 14;
             this.Xoasinhvienbtn.Text = "Xoá";
             this.Xoasinhvienbtn.UseVisualStyleBackColor = true;
+            this.Xoasinhvienbtn.Click += new System.EventHandler(this.Xoasinhvienbtn_Click);
             // 
             // Suasinhvienbtn
             // 
@@ -87,6 +97,7 @@
             this.Suasinhvienbtn.TabIndex = 13;
             this.Suasinhvienbtn.Text = "Sửa";
             this.Suasinhvienbtn.UseVisualStyleBackColor = true;
+            this.Suasinhvienbtn.Click += new System.EventHandler(this.Suasinhvienbtn_Click);
             // 
             // Themsinhvienbtn
             // 
@@ -96,6 +107,7 @@
             this.Themsinhvienbtn.TabIndex = 12;
             this.Themsinhvienbtn.Text = "Thêm";
             this.Themsinhvienbtn.UseVisualStyleBackColor = true;
+            this.Themsinhvienbtn.Click += new System.EventHandler(this.Themsinhvienbtn_Click);
             // 
             // SinhvienPhonetb
             // 
@@ -131,6 +143,7 @@
             this.SinhvienIDtb.Name = "SinhvienIDtb";
             this.SinhvienIDtb.Size = new System.Drawing.Size(282, 22);
             this.SinhvienIDtb.TabIndex = 7;
+            this.toolTip1.SetToolTip(this.SinhvienIDtb, "Đừng sửa Field này");
             // 
             // SinhvienPrkIDtb
             // 
@@ -138,6 +151,7 @@
             this.SinhvienPrkIDtb.Name = "SinhvienPrkIDtb";
             this.SinhvienPrkIDtb.Size = new System.Drawing.Size(282, 22);
             this.SinhvienPrkIDtb.TabIndex = 6;
+            this.toolTip1.SetToolTip(this.SinhvienPrkIDtb, "Đừng sửa Field này");
             // 
             // SinhvienPhonelb
             // 
@@ -201,10 +215,67 @@
             // 
             // viewpn
             // 
+            this.viewpn.Controls.Add(this.SinhvienView);
             this.viewpn.Location = new System.Drawing.Point(-1, 215);
             this.viewpn.Name = "viewpn";
             this.viewpn.Size = new System.Drawing.Size(1267, 308);
             this.viewpn.TabIndex = 1;
+            // 
+            // SinhvienView
+            // 
+            this.SinhvienView.AllowUserToAddRows = false;
+            this.SinhvienView.AllowUserToDeleteRows = false;
+            this.SinhvienView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.SinhvienView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.SinhvienPrkID,
+            this.SinhvienID,
+            this.SinhvienName,
+            this.SinhvienAddr});
+            this.SinhvienView.Location = new System.Drawing.Point(2, 4);
+            this.SinhvienView.Name = "SinhvienView";
+            this.SinhvienView.ReadOnly = true;
+            this.SinhvienView.RowHeadersWidth = 51;
+            this.SinhvienView.RowTemplate.Height = 24;
+            this.SinhvienView.Size = new System.Drawing.Size(1264, 303);
+            this.SinhvienView.TabIndex = 0;
+            this.SinhvienView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.SinhvienView_CellClick);
+            // 
+            // SinhvienPrkID
+            // 
+            this.SinhvienPrkID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.SinhvienPrkID.HeaderText = "SinhvienPrkID";
+            this.SinhvienPrkID.MinimumWidth = 6;
+            this.SinhvienPrkID.Name = "SinhvienPrkID";
+            this.SinhvienPrkID.ReadOnly = true;
+            // 
+            // SinhvienID
+            // 
+            this.SinhvienID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.SinhvienID.DataPropertyName = "SinhVienID";
+            this.SinhvienID.HeaderText = "SinhvienID";
+            this.SinhvienID.MinimumWidth = 6;
+            this.SinhvienID.Name = "SinhvienID";
+            this.SinhvienID.ReadOnly = true;
+            // 
+            // SinhvienName
+            // 
+            this.SinhvienName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.SinhvienName.HeaderText = "SinhvienName";
+            this.SinhvienName.MinimumWidth = 6;
+            this.SinhvienName.Name = "SinhvienName";
+            this.SinhvienName.ReadOnly = true;
+            // 
+            // SinhvienAddr
+            // 
+            this.SinhvienAddr.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.SinhvienAddr.HeaderText = "SinhvienAddr";
+            this.SinhvienAddr.MinimumWidth = 6;
+            this.SinhvienAddr.Name = "SinhvienAddr";
+            this.SinhvienAddr.ReadOnly = true;
+            // 
+            // toolTip1
+            // 
+            this.toolTip1.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Warning;
             // 
             // FormSinhVien
             // 
@@ -217,6 +288,8 @@
             this.Text = "Quản Lý Sinh Viên";
             this.controlpn.ResumeLayout(false);
             this.controlpn.PerformLayout();
+            this.viewpn.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.SinhvienView)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -240,6 +313,12 @@
         private System.Windows.Forms.TextBox SinhvienNametb;
         private System.Windows.Forms.TextBox SinhvienIDtb;
         private System.Windows.Forms.TextBox SinhvienPrkIDtb;
+        private System.Windows.Forms.DataGridView SinhvienView;
+        private System.Windows.Forms.DataGridViewTextBoxColumn SinhvienPrkID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn SinhvienID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn SinhvienName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn SinhvienAddr;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
 

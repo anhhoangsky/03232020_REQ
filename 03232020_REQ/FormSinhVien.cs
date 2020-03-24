@@ -7,6 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.XPath;
 
 namespace _03232020_REQ
 {
@@ -16,6 +19,65 @@ namespace _03232020_REQ
         public FormSinhVien()
         {
             InitializeComponent();
+            LoadSinhVienToControl();
+        }
+
+        private void Themsinhvienbtn_Click(object sender, EventArgs e)
+        {
+            SinhvienDBMng.Themsinhvien(getXDoc());
+            LoadSinhVienToControl();
+        }
+
+        private void Suasinhvienbtn_Click(object sender, EventArgs e)
+        {
+            SinhvienDBMng.Suasinhvien(getXDoc());
+            LoadSinhVienToControl();
+        }
+
+        private void Xoasinhvienbtn_Click(object sender, EventArgs e)
+        {
+            SinhvienDBMng.Xoasinhvien(getXDoc());
+            LoadSinhVienToControl();
+        }
+
+        private void LoadSinhVienToControl()
+        {
+            SinhvienView.Rows.Clear();
+            XmlDocument XmlSinhVien_View = SinhvienDBMng.GetDanhsachSinvien();
+            XPathNavigator nav = XmlSinhVien_View.CreateNavigator();
+            XPathNodeIterator nodes = nav.Select("//HEADER");
+            int r = 0;
+            foreach (XPathNavigator v in nodes)
+            {
+                SinhvienView.Rows.Add();
+                SinhvienView.Rows[r].Cells["SinhvienID"].Value = v.SelectSingleNode("@SinhvienID").Value.ToString();
+                SinhvienView.Rows[r].Cells["SinhvienPrkID"].Value = v.SelectSingleNode("@SinhvienPrkID").Value.ToString();
+                SinhvienView.Rows[r].Cells["SinhvienName"].Value = v.SelectSingleNode("@SinhvienName").Value.ToString();
+                SinhvienView.Rows[r].Cells["SinhvienAddr"].Value = v.SelectSingleNode("@SinhvienAddr").Value.ToString();
+                ++r;
+            }
+        }
+
+        private void SinhvienView_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            SinhvienIDtb.Text = SinhvienView.Rows[e.RowIndex].Cells["SinhvienID"].Value.ToString();
+            SinhvienNametb.Text = SinhvienView.Rows[e.RowIndex].Cells["SinhvienName"].Value.ToString();
+            SinhvienPrkIDtb.Text = SinhvienView.Rows[e.RowIndex].Cells["SinhvienPrkID"].Value.ToString();
+            SinhvienAddrtb.Text = SinhvienView.Rows[e.RowIndex].Cells["SinhvienAddr"].Value.ToString();
+        }
+
+        private XmlDocument getXDoc()
+        {
+            XDocument xDoc = new XDocument(new XElement("HEADER",
+                                             new XAttribute("SinhvienPrkID", SinhvienPrkIDtb.Text),
+                                             new XAttribute("SinhvienID", SinhvienPrkIDtb.Text),
+                                             new XAttribute("SinhvienName", SinhvienNametb.Text),
+                                             new XAttribute("SinhvienAddr", SinhvienAddrtb.Text),
+                                             new XAttribute("SinhvienEmail", SinhvienEmailtb.Text),
+                                             new XAttribute("SinhvienPhone", SinhvienPhonetb.Text)));
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(xDoc.ToString());
+            return xmlDoc;
         }
     }
 }
