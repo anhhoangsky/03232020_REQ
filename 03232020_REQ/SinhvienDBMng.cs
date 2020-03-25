@@ -108,7 +108,13 @@ namespace _03232020_REQ
                 }
             }
 
-            xmlDoc.LoadXml($"<VOUCHERS>{@result}</VOUCHERS>");
+            xmlDoc.LoadXml($@"<BIZREQUEST>
+                                <DATAAREA>
+                                    <VOUCHERS>
+                                        <VLINES>{ @result}</VLINES>
+                                    </VOUCHERS>
+                                </DATAAREA>
+                              </BIZREQUEST>");
 
             XPathNavigator nav = xmlDoc.CreateNavigator();
             XPathNodeIterator nodes = nav.Select("//@SinhvienPhone");
