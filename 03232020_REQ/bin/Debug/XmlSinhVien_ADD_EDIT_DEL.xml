@@ -1,8 +1,6 @@
 <BIZREQUEST>
   <DATAAREA>
     <VOUCHERS>
-      <HEADER SinhvienPrkID="94" SinhvienID="012345" SinhvienName="Nguyễn Văn An" SinhvienAddr="Huê" SinhvienEmail="" SinhvienPhone="0312456987" />
-      <HEADER SinhvienPrkID="95" SinhvienID="95" SinhvienName="Nguyễn Hoàng Anh" SinhvienAddr="Hà Tĩnh" SinhvienEmail="" SinhvienPhone="" />
     </VOUCHERS>
   </DATAAREA>
 </BIZREQUEST>

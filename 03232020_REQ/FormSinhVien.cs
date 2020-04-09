@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
@@ -24,19 +17,19 @@ namespace _03232020_REQ
 
         private void Themsinhvienbtn_Click(object sender, EventArgs e)
         {
-            SinhvienDBMng.Themsinhvien(getXDoc());
+            SinhvienDBMng.Themsinhvien(GetXDoc());
             LoadSinhVienToControl();
         }
 
         private void Suasinhvienbtn_Click(object sender, EventArgs e)
         {
-            SinhvienDBMng.Suasinhvien(getXDoc());
+            SinhvienDBMng.Suasinhvien(GetXDoc());
             LoadSinhVienToControl();
         }
 
         private void Xoasinhvienbtn_Click(object sender, EventArgs e)
         {
-            SinhvienDBMng.Xoasinhvien(getXDoc());
+            SinhvienDBMng.Xoasinhvien(GetXDoc());
             LoadSinhVienToControl();
         }
 
@@ -45,7 +38,7 @@ namespace _03232020_REQ
             SinhvienView.Rows.Clear();
             XmlDocument XmlSinhVien_View = SinhvienDBMng.GetDanhsachSinvien();
             XPathNavigator nav = XmlSinhVien_View.CreateNavigator();
-            XPathNodeIterator nodes = nav.Select("//HEADER");
+            XPathNodeIterator nodes = nav.Select("//LINE");
             int r = 0;
             foreach (XPathNavigator v in nodes)
             {
@@ -66,17 +59,23 @@ namespace _03232020_REQ
             SinhvienAddrtb.Text = SinhvienView.Rows[e.RowIndex].Cells["SinhvienAddr"].Value.ToString();
         }
 
-        private XmlDocument getXDoc()
+        private XmlDocument GetXDoc()
         {
-            XDocument xDoc = new XDocument(new XElement("HEADER",
-                                             new XAttribute("SinhvienPrkID", SinhvienPrkIDtb.Text),
-                                             new XAttribute("SinhvienID", SinhvienPrkIDtb.Text),
-                                             new XAttribute("SinhvienName", SinhvienNametb.Text),
-                                             new XAttribute("SinhvienAddr", SinhvienAddrtb.Text),
-                                             new XAttribute("SinhvienEmail", SinhvienEmailtb.Text),
-                                             new XAttribute("SinhvienPhone", SinhvienPhonetb.Text)));
+            XDocument xDoc = new XDocument(new XElement("BIZREQUEST",
+                                    new XElement("DATAAREA",
+                                        new XElement("VOUCHERS"))));
             XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(xDoc.ToString());
+            xmlDoc.Load(xDoc.CreateReader());
+            XPathNavigator nav = xmlDoc.CreateNavigator();
+            XElement header = new XElement("HEADER",
+                 new XAttribute("SinhvienPrkID", SinhvienPrkIDtb.Text),
+                 new XAttribute("SinhvienID", SinhvienPrkIDtb.Text),
+                 new XAttribute("SinhvienName", SinhvienNametb.Text),
+                 new XAttribute("SinhvienAddr", SinhvienAddrtb.Text),
+                 new XAttribute("SinhvienEmail", SinhvienEmailtb.Text),
+                 new XAttribute("SinhvienPhone", SinhvienPhonetb.Text));
+            nav.SelectSingleNode("//VOUCHERS").AppendChild(header.CreateReader());
+
             return xmlDoc;
         }
     }

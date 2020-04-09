@@ -6,31 +6,39 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.XPath;
 
 namespace _03232020_REQ
 {
     class SinhvienDBMng
     {
-        public static string path = $"{Application.StartupPath}/XmlSinhVien_ADD_EDIT_DEL.xml";
+        static string connetionString = "Data Source=.;Initial Catalog=03232020_REQ;User ID=sa;Password=123";
         public static void Themsinhvien(XmlDocument xmlDoc)
         {
-            XPathNavigator sv = xmlDoc.CreateNavigator();
-            XmlDocument xmlFile = new XmlDocument();
-            xmlFile.Load(path);
-            XPathNavigator nav = xmlFile.CreateNavigator();
-            nav.SelectSingleNode("//VOUCHERS").AppendChild(sv.SelectSingleNode("HEADER"));
-            xmlFile.Save(path);
-            string xml = nav.SelectSingleNode("//VOUCHERS").InnerXml.ToString();
-            string connetionString = null;
-            connetionString = "Data Source=.;Initial Catalog=SampleDB_XML;User ID=sa;Password=123";
+            XPathNavigator nav = xmlDoc.CreateNavigator();
+            XPathNavigator headers = nav.SelectSingleNode("//HEADER");
+            connetionString = "Data Source=.;Initial Catalog=03232020_REQ;User ID=sa;Password=123";
             using (SqlConnection cnn = new SqlConnection(connetionString))
             {
-                
-                string oString = @"Update XMLDB set DATA = @xml";
-                SqlCommand oCmd = new SqlCommand(oString, cnn);
-                oCmd.Parameters.AddWithValue("@xml", xml);
                 cnn.Open();
+
+                    string SinhvienPrkID = headers.SelectSingleNode("//@SinhvienPrkID").Value;
+                    string SinhvienID = headers.SelectSingleNode("//@SinhvienID").Value;
+                    string SinhvienName = headers.SelectSingleNode("//@SinhvienName").Value;
+                    string SinhvienAddr = headers.SelectSingleNode("//@SinhvienAddr").Value;
+                    string SinhvienEmail = headers.SelectSingleNode("//@SinhvienEmail").Value;
+                    string SinhvienPhone = headers.SelectSingleNode("//@SinhvienPhone").Value;
+                    string oString = @"insert into SinhVien 
+                                    values(@SinhvienPrkID,@SinhvienID,@SinhvienName,@SinhvienAddr,@SinhvienEmail,@SinhvienPhone)";
+                    SqlCommand oCmd = new SqlCommand(oString, cnn);
+                    oCmd.Parameters.AddWithValue("@SinhvienPrkID", SinhvienPrkID);
+                    oCmd.Parameters.AddWithValue("@SinhvienID", SinhvienID);
+                    oCmd.Parameters.AddWithValue("@SinhvienName", SinhvienName);
+                    oCmd.Parameters.AddWithValue("@SinhvienAddr", SinhvienAddr);
+                    oCmd.Parameters.AddWithValue("@SinhvienEmail", SinhvienEmail);
+                    oCmd.Parameters.AddWithValue("@SinhvienPhone", SinhvienPhone);
+
                 oCmd.ExecuteNonQuery();
                 cnn.Close();
             }
@@ -38,22 +46,29 @@ namespace _03232020_REQ
 
         public static void Suasinhvien(XmlDocument xmlDoc)
         {
-            XPathNavigator sv = xmlDoc.CreateNavigator();
-            string SinhvienID = sv.SelectSingleNode("//@SinhvienID").Value.ToString();
-            XmlDocument xmlFile = new XmlDocument();
-            xmlFile.Load(path);
-            XPathNavigator nav = xmlFile.CreateNavigator();
-            nav.SelectSingleNode($"//HEADER[@SinhvienID={SinhvienID}]").ReplaceSelf(sv.SelectSingleNode("HEADER"));
-            xmlFile.Save(path);
-            string xml = nav.SelectSingleNode("//VOUCHERS").InnerXml.ToString();
+            XPathNavigator nav = xmlDoc.CreateNavigator();
+            XPathNavigator headers = nav.SelectSingleNode("//HEADER");
             string connetionString = null;
-            connetionString = "Data Source=.;Initial Catalog=SampleDB_XML;User ID=sa;Password=123";
+            connetionString = "Data Source=.;Initial Catalog=03232020_REQ;User ID=sa;Password=123";
             using (SqlConnection cnn = new SqlConnection(connetionString))
             {
-
-                string oString = @"Update XMLDB set DATA = @xml";
+                string SinhvienPrkID = headers.SelectSingleNode("//@SinhvienPrkID").Value;
+                string SinhvienID = headers.SelectSingleNode("//@SinhvienID").Value;
+                string SinhvienName = headers.SelectSingleNode("//@SinhvienName").Value;
+                string SinhvienAddr = headers.SelectSingleNode("//@SinhvienAddr").Value;
+                string SinhvienEmail = headers.SelectSingleNode("//@SinhvienEmail").Value;
+                string SinhvienPhone = headers.SelectSingleNode("//@SinhvienPhone").Value;
+                string oString = @"Update SinhVien set 
+                                        SinhvienName = @SinhvienName, SinhvienAddr = @SinhvienAddr, SinhvienEmail = @SinhvienEmail
+                                        ,SinhvienPhone = @SinhvienPhone
+                                        where SinhvienID = @SinhvienID and SinhvienPrkID = @SinhvienPrkID";
                 SqlCommand oCmd = new SqlCommand(oString, cnn);
-                oCmd.Parameters.AddWithValue("@xml", xml);
+                oCmd.Parameters.AddWithValue("@SinhvienPrkID", SinhvienPrkID);
+                oCmd.Parameters.AddWithValue("@SinhvienID", SinhvienID);
+                oCmd.Parameters.AddWithValue("@SinhvienName", SinhvienName);
+                oCmd.Parameters.AddWithValue("@SinhvienAddr", SinhvienAddr);
+                oCmd.Parameters.AddWithValue("@SinhvienEmail", SinhvienEmail);
+                oCmd.Parameters.AddWithValue("@SinhvienPhone", SinhvienPhone);
                 cnn.Open();
                 oCmd.ExecuteNonQuery();
                 cnn.Close();
@@ -62,70 +77,55 @@ namespace _03232020_REQ
 
         public static void Xoasinhvien(XmlDocument xmlDoc)
         {
-            XPathNavigator sv = xmlDoc.CreateNavigator();
-            string SinhvienID = sv.SelectSingleNode("//@SinhvienID").Value.ToString();
-            XmlDocument xmlFile = new XmlDocument();
-            xmlFile.Load(path);
-            XPathNavigator nav = xmlFile.CreateNavigator();
-            nav.SelectSingleNode($"//HEADER[@SinhvienID={SinhvienID}]").DeleteSelf();
-            xmlFile.Save(path);
-            string xml = nav.SelectSingleNode("//VOUCHERS").InnerXml.ToString();
-            string connetionString = null;
-            connetionString = "Data Source=.;Initial Catalog=SampleDB_XML;User ID=sa;Password=123";
+            XPathNavigator nav = xmlDoc.CreateNavigator();
+            XPathNavigator headers = nav.SelectSingleNode("//HEADER");
+
             using (SqlConnection cnn = new SqlConnection(connetionString))
             {
-
-                string oString = @"Update XMLDB set DATA = @xml";
-                SqlCommand oCmd = new SqlCommand(oString, cnn);
-                oCmd.Parameters.AddWithValue("@xml", xml);
+                string SinhvienPrkID = headers.SelectSingleNode("//@SinhvienPrkID").Value;
+                SqlCommand oCmd = new SqlCommand();
+                oCmd.Connection = cnn;
+                oCmd.CommandType = System.Data.CommandType.Text;
+                oCmd.CommandTimeout = 300;
+                string oString = String.Format("DELETE FROM SinhVien Where SinhvienPrkID = @SinhvienPrkID");
+                oCmd.Parameters.AddWithValue("@SinhvienPrkID", SinhvienPrkID);
+                oCmd.CommandText = oString;
                 cnn.Open();
                 oCmd.ExecuteNonQuery();
                 cnn.Close();
             }
         }
-        /// <summary>
-        /// Database SampleDB_XML
-        /// Cột DATAAREA khoá chính data type nchar(10) giá trị 'VOUCHERS'
-        /// Cột DATA data type xml chứa innerXML
-        /// </summary>
-        /// <returns></returns>
+
         public static XmlDocument GetDanhsachSinvien()
         {
+            XDocument xDoc = new XDocument(new XElement("BIZREQUEST",
+                                                new XElement("DATAAREA",
+                                                    new XElement("VOUCHERS",
+                                                        new XElement("VLINES")))));
             XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.Load(xDoc.CreateReader());
+            XPathNavigator nav = xmlDoc.CreateNavigator();
             string connetionString = null;
-            String result = null;
-            connetionString = "Data Source=.;Initial Catalog=SampleDB_XML;User ID=sa;Password=123";
+            connetionString = "Data Source=.;Initial Catalog=03232020_REQ;User ID=sa;Password=123";
             using (SqlConnection cnn = new SqlConnection(connetionString))
             {
-                string oString = @"select DATA from XmlDB";
+                string oString = @"select * from SinhVien";
                 SqlCommand oCmd = new SqlCommand(oString, cnn);
                 cnn.Open();
                 using (SqlDataReader oReader = oCmd.ExecuteReader())
                 {
-                    if(oReader.Read())
-                    result = oReader["DATA"].ToString();
+                    while (oReader.Read())
+                    {
+                        XElement line = new XElement("LINE", 
+                                                        new XAttribute("SinhvienID", oReader["SinhvienID"]),
+                                                        new XAttribute("SinhvienPrkID", oReader["SinhvienPrkID"]),
+                                                        new XAttribute("SinhvienName", oReader["SinhvienName"]),
+                                                        new XAttribute("SinhvienAddr", oReader["SinhvienAddr"])
+                                                        );
+                        nav.SelectSingleNode("//VLINES").AppendChild(line.CreateReader());
+                    }
                     cnn.Close();
                 }
-            }
-
-            xmlDoc.LoadXml($@"<BIZREQUEST>
-                                <DATAAREA>
-                                    <VOUCHERS>
-                                        <VLINES>{ @result}</VLINES>
-                                    </VOUCHERS>
-                                </DATAAREA>
-                              </BIZREQUEST>");
-
-            XPathNavigator nav = xmlDoc.CreateNavigator();
-            XPathNodeIterator nodes = nav.Select("//@SinhvienPhone");
-            while (nodes.MoveNext())
-            {
-                nodes.Current.DeleteSelf();
-            }
-            nodes = nav.Select("//@SinhvienEmail");
-            while (nodes.MoveNext())
-            {
-                nodes.Current.DeleteSelf();
             }
             return xmlDoc;
         }
